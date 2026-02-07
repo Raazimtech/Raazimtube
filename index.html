@@ -1,0 +1,1213 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RaazimTube</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+    :root {
+      --bg: #f7f8fb;
+      --surface: #ffffff;
+      --surface-2: #f1f3f7;
+      --ink: #0f172a;
+      --muted: #667085;
+      --accent: #e11d48;
+      --accent-2: #111827;
+      --stroke: #e4e7ec;
+      --shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+      --chip: #eef1f6;
+      --chip-ink: #111827;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Manrope", system-ui, -apple-system, Segoe UI, sans-serif;
+      background: radial-gradient(1200px 420px at 12% -10%, rgba(225, 29, 72, 0.08), transparent 55%),
+                  radial-gradient(900px 420px at 95% 0%, rgba(17, 24, 39, 0.08), transparent 60%),
+                  var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; }
+
+    .app {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 100vh;
+    }
+
+    header {
+      grid-column: 1 / -1;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(247, 248, 251, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--stroke);
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 18px;
+      padding: 14px 22px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .brand img {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: var(--surface);
+      border: 1px solid var(--stroke);
+      padding: 6px;
+    }
+
+    .search {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--stroke);
+      border-radius: 999px;
+      padding: 10px 16px;
+      max-width: 680px;
+      width: 100%;
+      margin: 0 auto;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+    }
+
+    .search input {
+      border: none;
+      outline: none;
+      flex: 1;
+      font-size: 14px;
+      background: transparent;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      border: 1px solid var(--stroke);
+      background: var(--surface);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+
+    .icon-btn:hover {
+      border-color: rgba(225, 29, 72, 0.5);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      background: #fff0f5;
+      color: var(--accent-2);
+      cursor: pointer;
+    }
+
+    aside {
+      padding: 24px 16px 28px;
+      border-right: 1px solid var(--stroke);
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--muted);
+      margin: 18px 12px 10px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #2c3548;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .nav-link.active,
+    .nav-link:hover {
+      background: var(--surface-2);
+      color: var(--accent);
+    }
+
+    main {
+      padding: 18px 28px 60px;
+    }
+
+    .chips {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .chip {
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--chip);
+      color: var(--chip-ink);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .chip.active,
+    .chip:hover {
+      background: var(--surface);
+      border-color: var(--stroke);
+      color: var(--accent-2);
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+    }
+
+    .page {
+      display: none;
+      animation: fade 0.3s ease;
+    }
+
+    .page.active { display: block; }
+
+    @keyframes fade {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .hero-card {
+      background: var(--surface);
+      padding: 22px;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--stroke);
+    }
+
+    .hero-card h1 {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(24px, 3vw, 34px);
+      margin-bottom: 8px;
+    }
+
+    .hero-card p {
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 12px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .meta-pill {
+      background: var(--surface-2);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .section-title {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 20px;
+      margin-bottom: 14px;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 18px;
+    }
+
+    .video-card {
+      background: var(--surface);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--stroke);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+    }
+
+    .video-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+
+    .thumb {
+      position: relative;
+      background: #0b1020;
+    }
+
+    .thumb video {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+    }
+
+    .thumb .badge {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      padding: 4px 8px;
+      font-size: 11px;
+      border-radius: 6px;
+    }
+
+    .card-body {
+      padding: 12px 14px 16px;
+    }
+
+    .card-body h4 {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .card-body p {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .watch-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr);
+      gap: 22px;
+    }
+
+    .player {
+      background: var(--surface);
+      border-radius: 18px;
+      padding: 16px;
+      border: 1px solid var(--stroke);
+    }
+
+    .player video {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      height: auto;
+      border-radius: 12px;
+      background: #000;
+      object-fit: contain;
+    }
+
+    .player h2 {
+      margin: 12px 0 6px;
+      font-size: 20px;
+    }
+
+    .player p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .player-actions {
+      display: flex;
+      gap: 10px;
+      margin: 12px 0 6px;
+    }
+
+    .action-btn {
+      border: 1px solid var(--stroke);
+      background: var(--surface-2);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .side-panel {
+      display: grid;
+      gap: 16px;
+    }
+
+    .side-card {
+      background: var(--surface);
+      border-radius: 16px;
+      border: 1px solid var(--stroke);
+      padding: 14px;
+    }
+
+    .side-card h4 {
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .side-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .side-item {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .side-item video {
+      width: 90px;
+      height: 54px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #000;
+      pointer-events: none;
+    }
+
+    .side-item span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .empty {
+      padding: 18px;
+      border-radius: 14px;
+      background: var(--surface);
+      border: 1px dashed var(--stroke);
+      color: var(--muted);
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+
+    .modal.active { display: flex; }
+
+    .modal-card {
+      width: min(420px, 90vw);
+      background: var(--surface);
+      border-radius: 18px;
+      padding: 22px;
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadow);
+    }
+
+    .modal-card h3 {
+      font-family: "Space Grotesk", sans-serif;
+      margin-bottom: 12px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .field input {
+      border: 1px solid var(--stroke);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .modal-actions button {
+      flex: 1;
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--stroke);
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--surface-2);
+    }
+
+    .modal-actions .primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    @media (max-width: 1050px) {
+      .app { grid-template-columns: 1fr; }
+      aside { display: none; }
+      .watch-layout { grid-template-columns: 1fr; }
+      .topbar { grid-template-columns: 1fr; }
+      .search { max-width: 100%; }
+      .top-actions { justify-content: space-between; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="topbar">
+        <div class="brand" id="homeBrand" role="button" tabindex="0" aria-label="Go to home">
+          <img src="logor.png" alt="RaazimTube logo" />
+          <span>RaazimTube</span>
+        </div>
+        <div class="search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" placeholder="Search videos, channels, playlists" />
+        </div>
+        <div class="top-actions">
+          <button class="icon-btn" id="createBtn" type="button">Create</button>
+          <button class="icon-btn" id="notifyBtn" type="button">Notifications</button>
+          <button class="icon-btn" id="authBtn" type="button">Sign in</button>
+          <div class="avatar" id="profileAvatar" title="Account" hidden>R</div>
+        </div>
+      </div>
+    </header>
+
+    <input id="uploadInput" type="file" accept="video/*" hidden />
+    <input id="pfpInput" type="file" accept="image/*" hidden />
+
+    <aside>
+      <div class="nav-title">Browse</div>
+      <a class="nav-link" data-link="home" href="#home">Home</a>
+      <a class="nav-link" data-link="explore" href="#explore">Explore</a>
+      <a class="nav-link" data-link="subscriptions" href="#subscriptions">Subscriptions</a>
+      <a class="nav-link" data-link="watch" href="#watch">Watch</a>
+      <a class="nav-link" data-link="channel" href="#channel">My Channel</a>
+
+      <div class="nav-title">Library</div>
+      <a class="nav-link" data-link="library" href="#library">Your uploads</a>
+      <a class="nav-link" data-link="history" href="#history">History</a>
+    </aside>
+
+    <main>
+      <div class="chips" id="topicChips">
+        <button class="chip active" data-filter="all">All</button>
+        <button class="chip" data-filter="highlights">Highlights</button>
+        <button class="chip" data-filter="music">Music</button>
+        <button class="chip" data-filter="school">School</button>
+        <button class="chip" data-filter="nasheed">Nasheed</button>
+        <button class="chip" data-filter="training">Training</button>
+      </div>
+
+      <section id="home" class="page" data-page="home">
+        <div class="hero">
+          <div class="hero-card">
+            <h1>Welcome to RaazimTube Studio</h1>
+            <p>Stream your full library, keep uploads tied to real accounts, and manage your channel with a clean professional experience.</p>
+            <div class="hero-meta">
+              <span class="meta-pill">Account system</span>
+              <span class="meta-pill">Persistent uploads</span>
+              <span class="meta-pill">Pro layout</span>
+            </div>
+          </div>
+          <div class="hero-card">
+            <h1>Your channel, your identity</h1>
+            <p>Every upload stays in your library, ready for viewers. Keep analytics, highlights, and watch history organized.</p>
+            <div class="hero-meta">
+              <span class="meta-pill">Creator tools</span>
+              <span class="meta-pill">Instant publish</span>
+            </div>
+          </div>
+        </div>
+        <h2 class="section-title">Latest uploads</h2>
+        <div class="video-grid" id="homeGrid"></div>
+      </section>
+
+      <section id="explore" class="page" data-page="explore">
+        <h2 class="section-title">Explore highlights</h2>
+        <div class="video-grid" id="exploreGrid"></div>
+      </section>
+
+      <section id="subscriptions" class="page" data-page="subscriptions">
+        <h2 class="section-title">Subscriptions</h2>
+        <div class="video-grid" id="subsGrid"></div>
+      </section>
+
+      <section id="library" class="page" data-page="library">
+        <h2 class="section-title">Your uploads</h2>
+        <div class="video-grid" id="libraryGrid"></div>
+      </section>
+
+      <section id="channel" class="page" data-page="channel">
+        <h2 class="section-title">My channel</h2>
+        <div id="channelInfo" class="empty"></div>
+        <div class="video-grid" id="channelGrid" style="margin-top: 16px;"></div>
+      </section>
+
+      <section id="history" class="page" data-page="history">
+        <h2 class="section-title">History</h2>
+        <div id="historyBox" class="empty">Start watching videos to build your history.</div>
+      </section>
+
+      <section id="watch" class="page" data-page="watch">
+        <div class="watch-layout">
+          <div class="player">
+            <video id="watchVideo" controls preload="metadata" playsinline></video>
+            <h2 id="watchTitle">Select a video to watch</h2>
+            <div class="player-actions">
+              <button class="action-btn">Like</button>
+              <button class="action-btn">Share</button>
+              <button class="action-btn">Save</button>
+              <button class="action-btn" id="downloadBtn" type="button">Download</button>
+              <button class="action-btn">Subscribe</button>
+            </div>
+            <p id="watchMeta">Choose any video from the feed to start playback.</p>
+          </div>
+          <div class="side-panel">
+            <div class="side-card">
+              <h4>Up next</h4>
+              <div class="side-list" id="upNext"></div>
+            </div>
+            <div class="side-card">
+              <h4>Channel info</h4>
+              <p id="channelMeta">RaazimTube channel · Curated highlights and creator uploads.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal" id="authModal">
+    <div class="modal-card">
+      <h3>Account access</h3>
+      <div class="field">
+        <label for="authName">Username</label>
+        <input id="authName" type="text" placeholder="Choose a username" />
+      </div>
+      <div class="field">
+        <label for="authPass">Password</label>
+        <input id="authPass" type="password" placeholder="Create a password" />
+      </div>
+      <div class="modal-actions">
+        <button id="signInBtn" class="primary" type="button">Sign in</button>
+        <button id="signUpBtn" type="button">Create account</button>
+        <button id="signOutBtn" type="button">Sign out</button>
+      </div>
+      <div class="modal-actions">
+        <button id="uploadPfpBtn" type="button">Upload profile photo</button>
+        <button id="removePfpBtn" type="button">Remove photo</button>
+      </div>
+      <p style="margin-top: 12px; font-size: 12px; color: var(--muted);">
+        Accounts are stored locally in your browser. Uploads are saved to your device using browser storage.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const seededVideos = [
+      "29_July_2022_720P.mp4",
+      "AQMq537kNyDowK2X6diovNisg3MM8m07zpvQ9HKOZjuxzPQW4kafukIOS56l5-DRjiPwLfknT2w1VaJu0RNPFp3nq5-npDqcxzPHn4olj9Z8ww.mp4",
+      "AQNYyhocyfa1KX5Rnoom8p-DvyaDf47A4mHpo59tFwX-nVFjawFIMM2eXohzjswEaTkgVU8PVlMiZqpyAyYjiAs.mp4",
+      "Mbk International School Borama.mp4",
+      "MBK_International_School_720P.mp4",
+      "Nasheed_Ya_Adheeman_-_Ahmed_Bukhatir_-_-_Arabic_Music_Video_240P.mp4"
+    ];
+
+    const dom = {
+      homeGrid: document.getElementById("homeGrid"),
+      exploreGrid: document.getElementById("exploreGrid"),
+      subsGrid: document.getElementById("subsGrid"),
+      libraryGrid: document.getElementById("libraryGrid"),
+      channelGrid: document.getElementById("channelGrid"),
+      channelInfo: document.getElementById("channelInfo"),
+      historyBox: document.getElementById("historyBox"),
+      upNext: document.getElementById("upNext"),
+      watchVideo: document.getElementById("watchVideo"),
+      watchTitle: document.getElementById("watchTitle"),
+      watchMeta: document.getElementById("watchMeta"),
+      channelMeta: document.getElementById("channelMeta"),
+      searchInput: document.querySelector(".search input"),
+      uploadInput: document.getElementById("uploadInput"),
+      createBtn: document.getElementById("createBtn"),
+      notifyBtn: document.getElementById("notifyBtn"),
+      authBtn: document.getElementById("authBtn"),
+      profileAvatar: document.getElementById("profileAvatar"),
+      homeBrand: document.getElementById("homeBrand"),
+      actionButtons: document.querySelectorAll(".player-actions .action-btn"),
+      downloadBtn: document.getElementById("downloadBtn"),
+      pfpInput: document.getElementById("pfpInput"),
+      uploadPfpBtn: document.getElementById("uploadPfpBtn"),
+      removePfpBtn: document.getElementById("removePfpBtn"),
+      authModal: document.getElementById("authModal"),
+      authName: document.getElementById("authName"),
+      authPass: document.getElementById("authPass"),
+      signInBtn: document.getElementById("signInBtn"),
+      signUpBtn: document.getElementById("signUpBtn"),
+      signOutBtn: document.getElementById("signOutBtn"),
+      topicChips: document.getElementById("topicChips")
+    };
+
+    const state = {
+      videos: [],
+      history: JSON.parse(localStorage.getItem("rt_history") || "[]"),
+      users: JSON.parse(localStorage.getItem("rt_users") || "[]"),
+      currentUser: localStorage.getItem("rt_currentUser") || "",
+      currentVideoId: "",
+      currentPfp: "",
+      chip: "all",
+      urlCache: new Map()
+    };
+
+    function openAuthModal(show) {
+      dom.authModal.classList.toggle("active", show);
+    }
+
+    function saveUsers() {
+      localStorage.setItem("rt_users", JSON.stringify(state.users));
+    }
+
+    function getUserPfp(name) {
+      const user = state.users.find((u) => u.name === name);
+      return user && user.pfp ? user.pfp : "";
+    }
+
+    function setUserPfp(name, dataUrl) {
+      const user = state.users.find((u) => u.name === name);
+      if (user) {
+        user.pfp = dataUrl;
+        saveUsers();
+        state.currentPfp = dataUrl;
+        updateAuthUI();
+      }
+    }
+
+    function removeUserPfp(name) {
+      const user = state.users.find((u) => u.name === name);
+      if (user) {
+        delete user.pfp;
+        saveUsers();
+        state.currentPfp = "";
+        updateAuthUI();
+      }
+    }
+
+    function setCurrentUser(name) {
+      state.currentUser = name;
+      localStorage.setItem("rt_currentUser", name);
+      state.currentPfp = getUserPfp(name);
+      updateAuthUI();
+      renderChannel();
+      renderLibrary();
+    }
+
+    function updateAuthUI() {
+      const signedIn = Boolean(state.currentUser);
+      dom.authBtn.hidden = signedIn;
+      dom.profileAvatar.hidden = !signedIn;
+      dom.signOutBtn.style.display = signedIn ? "inline-block" : "none";
+      dom.uploadPfpBtn.style.display = signedIn ? "inline-block" : "none";
+      dom.removePfpBtn.style.display = signedIn ? "inline-block" : "none";
+      if (signedIn) {
+        const initial = state.currentUser.slice(0, 1).toUpperCase();
+        if (state.currentPfp) {
+          dom.profileAvatar.textContent = "";
+          dom.profileAvatar.style.backgroundImage = `url(${state.currentPfp})`;
+          dom.profileAvatar.style.backgroundSize = "cover";
+          dom.profileAvatar.style.backgroundPosition = "center";
+        } else {
+          dom.profileAvatar.style.backgroundImage = "none";
+          dom.profileAvatar.textContent = initial;
+        }
+        dom.profileAvatar.title = state.currentUser;
+      }
+    }
+
+    function showToast(message) {
+      dom.channelMeta.textContent = message;
+      setTimeout(() => {
+      dom.channelMeta.textContent = "RaazimTube channel · Curated highlights and creator uploads.";
+      }, 2000);
+    }
+
+    function buildTitle(name) {
+      return name.replace(/\.[^/.]+$/, "").replace(/[_-]+/g, " ").replace(/\s+/g, " ").trim();
+    }
+
+    function keywordTag(title) {
+      const lower = title.toLowerCase();
+      if (lower.includes("highlight")) return "highlights";
+      if (lower.includes("nasheed") || lower.includes("arabic")) return "nasheed";
+      if (lower.includes("school")) return "school";
+      if (lower.includes("music")) return "music";
+      return "training";
+    }
+
+    function seedVideoData() {
+      return seededVideos.map((file, index) => ({
+        id: `seed-${index + 1}`,
+        file,
+        title: buildTitle(file),
+        channel: "RaazimTube",
+        views: `${(Math.random() * 900 + 100).toFixed(0)}K views`,
+        age: `${Math.floor(Math.random() * 5) + 1} days ago`,
+        tag: keywordTag(file),
+        owner: "RaazimTube",
+        fileName: file
+      }));
+    }
+
+    function openDB() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open("raazimtube", 1);
+        request.onupgradeneeded = (event) => {
+          const db = event.target.result;
+          if (!db.objectStoreNames.contains("uploads")) {
+            const store = db.createObjectStore("uploads", { keyPath: "id" });
+            store.createIndex("owner", "owner", { unique: false });
+          }
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    async function getAllUploads() {
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction("uploads", "readonly");
+        const store = tx.objectStore("uploads");
+        const req = store.getAll();
+        req.onsuccess = () => resolve(req.result || []);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function addUpload(record) {
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction("uploads", "readwrite");
+        const store = tx.objectStore("uploads");
+        const req = store.put(record);
+        req.onsuccess = () => resolve(true);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    function clearObjectUrls() {
+      state.urlCache.forEach((url) => URL.revokeObjectURL(url));
+      state.urlCache.clear();
+    }
+
+    async function loadUploads() {
+      const uploads = await getAllUploads();
+      const mapped = uploads.map((item) => {
+        const url = URL.createObjectURL(item.blob);
+        state.urlCache.set(item.id, url);
+        return {
+          id: item.id,
+          file: url,
+          title: item.title,
+          channel: item.owner,
+          owner: item.owner,
+          views: item.views,
+          age: item.age,
+          tag: item.tag,
+          fileName: item.fileName || `${item.title}.mp4`,
+          mime: item.mime || ""
+        };
+      });
+      return mapped;
+    }
+
+    function renderGrid(container, list) {
+      container.innerHTML = "";
+      list.forEach((video) => {
+        const card = document.createElement("div");
+        card.className = "video-card";
+        card.dataset.video = video.id;
+        card.innerHTML = `
+          <div class="thumb">
+            <video preload="metadata" muted playsinline>
+              <source src="${video.file}" />
+            </video>
+            <span class="badge">HD</span>
+          </div>
+          <div class="card-body">
+            <h4>${video.title}</h4>
+            <p>${video.channel} · ${video.views}</p>
+          </div>
+        `;
+        card.addEventListener("click", () => {
+          location.hash = `watch=${encodeURIComponent(video.id)}`;
+        });
+        container.appendChild(card);
+      });
+    }
+
+    function renderUpNext(list) {
+      dom.upNext.innerHTML = "";
+      list.slice(0, 6).forEach((video) => {
+        const item = document.createElement("div");
+        item.className = "side-item";
+        item.dataset.video = video.id;
+        item.innerHTML = `
+          <video preload="metadata" muted playsinline>
+            <source src="${video.file}" />
+          </video>
+          <div>
+            <div>${video.title}</div>
+            <span>${video.views}</span>
+          </div>
+        `;
+        item.addEventListener("click", () => {
+          location.hash = `watch=${encodeURIComponent(video.id)}`;
+        });
+        dom.upNext.appendChild(item);
+      });
+    }
+
+    function setActivePage(page) {
+      document.querySelectorAll(".page").forEach((section) => {
+        section.classList.toggle("active", section.dataset.page === page);
+      });
+      document.querySelectorAll(".nav-link").forEach((link) => {
+        link.classList.toggle("active", link.dataset.link === page);
+      });
+    }
+
+    function loadWatch(id) {
+      const selected = state.videos.find((v) => v.id === id) || state.videos[0];
+      if (!selected) return;
+      dom.watchVideo.pause();
+      dom.watchVideo.src = selected.file;
+      dom.watchTitle.textContent = selected.title;
+      dom.watchMeta.textContent = `${selected.channel} · ${selected.views} · ${selected.age}`;
+      state.currentVideoId = selected.id;
+      renderUpNext(state.videos.filter((v) => v.id !== selected.id));
+      state.history = [selected.id, ...state.history.filter((v) => v !== selected.id)].slice(0, 15);
+      localStorage.setItem("rt_history", JSON.stringify(state.history));
+      renderHistory();
+    }
+
+    function route() {
+      const hash = location.hash.replace("#", "");
+      if (hash.startsWith("watch=")) {
+        setActivePage("watch");
+        const id = decodeURIComponent(hash.split("watch=")[1] || "");
+        loadWatch(id);
+        return;
+      }
+      const page = hash || "home";
+      setActivePage(page);
+    }
+
+    function applyFilters() {
+      const query = dom.searchInput.value.trim().toLowerCase();
+      const filtered = state.videos.filter((video) => {
+        const matchesQuery = !query || video.title.toLowerCase().includes(query) || video.channel.toLowerCase().includes(query);
+        const matchesChip = state.chip === "all" || video.tag === state.chip;
+        return matchesQuery && matchesChip;
+      });
+      renderGrid(dom.homeGrid, filtered);
+      renderGrid(dom.exploreGrid, filtered);
+      renderGrid(dom.subsGrid, filtered.slice(0, 8));
+    }
+
+    function renderHistory() {
+      if (!state.history.length) {
+        dom.historyBox.textContent = "Start watching videos to build your history.";
+        return;
+      }
+      const list = state.history.map((id) => state.videos.find((v) => v.id === id)).filter(Boolean);
+      dom.historyBox.textContent = "";
+      const tempGrid = document.createElement("div");
+      tempGrid.className = "video-grid";
+      dom.historyBox.replaceWith(tempGrid);
+      tempGrid.id = "historyBox";
+      dom.historyBox = tempGrid;
+      renderGrid(dom.historyBox, list);
+    }
+
+    function renderLibrary() {
+      const uploads = state.videos.filter((v) => v.id.startsWith("upl-"));
+      if (!uploads.length) {
+        dom.libraryGrid.innerHTML = "<div class=\"empty\">No uploads yet. Use Create to upload your first video.</div>";
+        return;
+      }
+      renderGrid(dom.libraryGrid, uploads);
+    }
+
+    function renderChannel() {
+      if (!state.currentUser) {
+        dom.channelInfo.textContent = "Sign in to access your channel and manage your uploads.";
+        dom.channelGrid.innerHTML = "";
+        return;
+      }
+      const mine = state.videos.filter((v) => v.owner === state.currentUser);
+      dom.channelInfo.textContent = `${state.currentUser} · ${mine.length} uploads`;
+      if (!mine.length) {
+        dom.channelGrid.innerHTML = "<div class=\"empty\">Your channel is empty. Upload your first video.</div>";
+        return;
+      }
+      renderGrid(dom.channelGrid, mine);
+    }
+
+    function requireAuth() {
+      if (!state.currentUser) {
+        openAuthModal(true);
+        showToast("Sign in to upload and keep videos in your library.");
+        return false;
+      }
+      return true;
+    }
+
+    async function addUploadedVideo(file) {
+      if (!requireAuth()) return;
+      const title = buildTitle(file.name);
+      const record = {
+        id: `upl-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+        owner: state.currentUser,
+        title,
+        views: "0 views",
+        age: "just now",
+        tag: keywordTag(title),
+        blob: file,
+        fileName: file.name,
+        mime: file.type
+      };
+      await addUpload(record);
+      clearObjectUrls();
+      await bootstrap();
+      location.hash = `watch=${encodeURIComponent(record.id)}`;
+    }
+
+    function getDownloadName(video) {
+      if (video.fileName) return video.fileName;
+      const extMatch = (video.file || "").split(".").pop();
+      const ext = extMatch && extMatch.length <= 5 ? extMatch : "mp4";
+      return `${video.title}.${ext}`;
+    }
+
+    function downloadVideoById(id) {
+      const video = state.videos.find((v) => v.id === id);
+      if (!video) {
+        showToast("Select a video to download.");
+        return;
+      }
+      const a = document.createElement("a");
+      a.href = video.file;
+      a.download = getDownloadName(video);
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+    function setupAuth() {
+      dom.authBtn.addEventListener("click", () => openAuthModal(true));
+      dom.profileAvatar.addEventListener("click", () => openAuthModal(true));
+      dom.authModal.addEventListener("click", (event) => {
+        if (event.target === dom.authModal) openAuthModal(false);
+      });
+      dom.signInBtn.addEventListener("click", () => {
+        const name = dom.authName.value.trim();
+        const pass = dom.authPass.value.trim();
+        const user = state.users.find((u) => u.name === name && u.pass === pass);
+        if (!user) {
+          showToast("Incorrect username or password.");
+          return;
+        }
+        setCurrentUser(name);
+        openAuthModal(false);
+      });
+      dom.signUpBtn.addEventListener("click", () => {
+        const name = dom.authName.value.trim();
+        const pass = dom.authPass.value.trim();
+        if (!name || !pass) {
+          showToast("Enter a username and password.");
+          return;
+        }
+        if (state.users.some((u) => u.name === name)) {
+          showToast("That username is already taken.");
+          return;
+        }
+        state.users.push({ name, pass, pfp: "" });
+        saveUsers();
+        setCurrentUser(name);
+        openAuthModal(false);
+      });
+      dom.signOutBtn.addEventListener("click", () => {
+        setCurrentUser("");
+        openAuthModal(false);
+      });
+    }
+
+    function setupChips() {
+      dom.topicChips.querySelectorAll(".chip").forEach((chip) => {
+        chip.addEventListener("click", () => {
+          dom.topicChips.querySelectorAll(".chip").forEach((c) => c.classList.remove("active"));
+          chip.classList.add("active");
+          state.chip = chip.dataset.filter;
+          applyFilters();
+        });
+      });
+    }
+
+    function setupSearch() {
+      dom.searchInput.addEventListener("input", applyFilters);
+      dom.searchInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          location.hash = "home";
+          applyFilters();
+        }
+      });
+    }
+
+    function setupCreate() {
+      dom.createBtn.addEventListener("click", () => {
+        if (requireAuth()) {
+          dom.uploadInput.value = "";
+          dom.uploadInput.click();
+        }
+      });
+      dom.uploadInput.addEventListener("change", (event) => {
+        const file = event.target.files && event.target.files[0];
+        if (file) addUploadedVideo(file);
+      });
+      dom.notifyBtn.addEventListener("click", () => showToast("You are all caught up."));
+    }
+
+    function setupProfilePhoto() {
+      dom.uploadPfpBtn.addEventListener("click", () => {
+        if (!state.currentUser) {
+          showToast("Sign in to upload a profile photo.");
+          return;
+        }
+        dom.pfpInput.value = "";
+        dom.pfpInput.click();
+      });
+      dom.pfpInput.addEventListener("change", (event) => {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          setUserPfp(state.currentUser, reader.result);
+          showToast("Profile photo updated.");
+        };
+        reader.readAsDataURL(file);
+      });
+      dom.removePfpBtn.addEventListener("click", () => {
+        if (!state.currentUser) return;
+        removeUserPfp(state.currentUser);
+        showToast("Profile photo removed.");
+      });
+    }
+
+    function setupDownload() {
+      dom.downloadBtn.addEventListener("click", () => {
+        downloadVideoById(state.currentVideoId);
+      });
+    }
+
+    function setupPlayerActions() {
+      dom.actionButtons.forEach((btn) => {
+        if (btn === dom.downloadBtn) return;
+        btn.addEventListener("click", () => {
+          const label = btn.textContent.trim();
+          if (!state.currentVideoId) {
+            showToast("Select a video to interact with.");
+            return;
+          }
+          showToast(`${label} added.`);
+        });
+      });
+    }
+
+    function setupHomeBrand() {
+      const goHome = () => {
+        location.hash = "home";
+        route();
+      };
+      dom.homeBrand.addEventListener("click", goHome);
+      dom.homeBrand.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          goHome();
+        }
+      });
+    }
+
+    async function bootstrap() {
+      const seeded = seedVideoData();
+      const uploads = await loadUploads();
+      state.videos = [...uploads, ...seeded];
+      applyFilters();
+      renderLibrary();
+      renderChannel();
+      renderHistory();
+      renderUpNext(state.videos);
+      route();
+    }
+
+    setupAuth();
+    setupChips();
+    setupSearch();
+    setupCreate();
+    setupProfilePhoto();
+    setupDownload();
+    setupPlayerActions();
+    setupHomeBrand();
+    updateAuthUI();
+
+    window.addEventListener("hashchange", route);
+    window.addEventListener("beforeunload", () => clearObjectUrls());
+
+    bootstrap();
+  </script>
+</body>
+</html>
